@@ -22,8 +22,7 @@ struct ColorPickingView: View {
     @State var opacity = 1.0
     
     var body: some View {
-        color = Color(hue: hue, saturation: saturation, brightness: brightness, opacity: opacity)
-        return VStack {
+        VStack {
             Capsule()
                 .fill(color)
                 .frame(height: 10)
@@ -107,6 +106,14 @@ struct ColorPickingView: View {
             }
             .frame(height: 150)
         }
+        .onChange(of: hue, perform: updateColor)
+        .onChange(of: saturation, perform: updateColor)
+        .onChange(of: brightness, perform: updateColor)
+        .onChange(of: opacity, perform: updateColor)
+    }
+    
+    func updateColor(_: Double) {
+        color = Color(hue: hue, saturation: saturation, brightness: brightness, opacity: opacity)
     }
 }
 
@@ -117,7 +124,7 @@ struct ColorPickingView_Previews: PreviewProvider {
         var palette = Array(0...10).map { _ in
             HSV(h: Double.random(in: 0...1), s: Double.random(in: 0...1), v: Double.random(in: 0...1))
         }
-        let _palette = Binding<[HSV]>(get: { palette }, set: { palette = $0 })
+//        let _palette = Binding<[HSV]>(get: { palette }, set: { palette = $0 })
         ColorPickingView(color: _color, palette: palette)
     }
 }
